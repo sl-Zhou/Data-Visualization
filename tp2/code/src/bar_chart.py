@@ -21,7 +21,7 @@ def init_figure():
     '''
     fig = go.Figure()
 
-    # TODO : Update the template to include our new theme and set the title
+    # TODO : Update the template to include the new theme and set the title
     create_template()
     fig.update_layout(
         template="simple_white+custom_theme",
@@ -76,7 +76,7 @@ def draw(fig, data, mode):
         )
     )
 
-    # Update layout for better visualization
+    # Update layout
     fig.update_layout(
         title=dict(
             text='Lines per Act',
