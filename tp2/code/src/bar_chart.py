@@ -8,7 +8,7 @@ import plotly.io as pio
 
 from hover_template import get_hover_template
 from modes import MODES, MODE_TO_COLUMN
-
+from template import THEME, create_template
 
 def init_figure():
     '''
@@ -22,11 +22,16 @@ def init_figure():
     fig = go.Figure()
 
     # TODO : Update the template to include our new theme and set the title
-    
+    create_template()
     fig.update_layout(
-        template=pio.templates['simple_white'],
+        template="simple_white+custom_theme",
         dragmode=False,
-        barmode='relative'
+        barmode='relative',
+        title=dict(
+            text='Lines per Act',
+            x=0,
+            xanchor='left'
+        )
     )
 
     return fig
@@ -73,13 +78,19 @@ def draw(fig, data, mode):
 
     # Update layout for better visualization
     fig.update_layout(
+        title=dict(
+            text='Lines per Act',
+            x=0,
+            xanchor='left'
+        ),
         xaxis=dict(
             tickvals=[1, 2, 3, 4, 5],
-            ticktext=['Act 1', 'Act 2', 'Act 3', 'Act 4', 'Act 5']),
+            ticktext=['Act 1', 'Act 2', 'Act 3', 'Act 4', 'Act 5']
+        ),
         yaxis_title=yaxis_title,
-        title = 'Lines per act',
-        barmode='stack'  # Stacked bar chart
+        barmode='stack'
     )
+
     return fig
 
 def update_y_axis(fig, mode):

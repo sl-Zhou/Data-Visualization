@@ -27,31 +27,20 @@ def get_hover_template(name, mode):
     '''
     # TODO: Generate and return the over template
 
+    # Lowercase the mode for consistency
     mode = mode.lower()
-    
-    if mode not in MODES:
-        raise ValueError(f"Invalid mode: {mode}. Mode must be one of {MODES}.")
 
+    # Base template for player name
+    template = '<span style="font-family: Grenze Gotisch; font-size: 24px; color: black;">{}</span><br>'.format(name)
+
+    # Add the lines information based on mode
     if mode == 'count':
-        hover_template = f"""
-        <span style="font-family: 'Verdana'; font-size: 24px; color: black;">
-            {name}
-        </span><br>
-        <span style="font-size: 16px; color: #555555;">
-            %{{y}} lines
-        </span>
-        """
+        # Use %{y} for y-axis values
+        template += '%{y} lines<extra></extra>'
     elif mode == 'percent':
-        hover_template = f"""
-        <span style="font-family: 'Grenze Gotish'; font-size: 24px; color: black;">
-            {name}
-        </span><br>
-        <span style="font-size: 16px; color: #555555;">
-            %{{y:.2f}}% of lines
-        </span>
-        """
+        # Format percentage with two decimal points
+        template += '%{y:.2f}% of lines<extra></extra>'
     else:
-        # This should never happen
-        raise ValueError(f"Unhandled mode: {mode}")
+        raise ValueError(f"Invalid mode '{mode}'. Mode should be 'count' or 'percent'.")
 
-    return hover_template
+    return template

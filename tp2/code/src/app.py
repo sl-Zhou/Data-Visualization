@@ -144,5 +144,5 @@ data = prep_data()
 create_template()
 
 fig = bar_chart.init_figure()
-fig.update_layout(template='custom_theme')
+
 app.layout = init_app_layout(fig)
