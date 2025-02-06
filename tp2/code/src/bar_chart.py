@@ -61,11 +61,11 @@ def draw(fig, data, mode):
     value_column = MODE_TO_COLUMN[MODES[mode]]
     yaxis_title = 'Line Count' if mode == 'count' else 'Line Percentage (%)'
 
-    # Get the list of unique players
-    players = data['Player'].unique()
+    # Get the sorted list of players
+    sorted_players = sorted(data['Player'].unique())
 
     # Add a bar trace for each player
-    for player in players:
+    for player in sorted_players:
         player_data = data[data['Player'] == player]
         fig.add_trace(
             go.Bar(
@@ -88,7 +88,8 @@ def draw(fig, data, mode):
             ticktext=['Act 1', 'Act 2', 'Act 3', 'Act 4', 'Act 5']
         ),
         yaxis_title=yaxis_title,
-        barmode='stack'
+        barmode='stack',
+        legend = dict(traceorder='normal')
     )
 
     return fig
