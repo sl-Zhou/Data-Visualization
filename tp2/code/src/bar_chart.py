@@ -8,7 +8,7 @@ import plotly.io as pio
 
 from hover_template import get_hover_template
 from modes import MODES, MODE_TO_COLUMN
-
+from template import THEME, create_template
 
 def init_figure():
     '''
@@ -21,12 +21,17 @@ def init_figure():
     '''
     fig = go.Figure()
 
-    # TODO : Update the template to include our new theme and set the title
-    
+    # TODO : Update the template to include the new theme and set the title
+    create_template()
     fig.update_layout(
-        template=pio.templates['simple_white'],
+        template="simple_white+custom_theme",
         dragmode=False,
-        barmode='relative'
+        barmode='relative',
+        title=dict(
+            text='Lines per Act',
+            x=0,
+            xanchor='left'
+        )
     )
 
     return fig
@@ -56,11 +61,11 @@ def draw(fig, data, mode):
     value_column = MODE_TO_COLUMN[MODES[mode]]
     yaxis_title = 'Line Count' if mode == 'count' else 'Line Percentage (%)'
 
-    # Get the list of unique players
-    players = data['Player'].unique()
+    # Get the sorted list of players
+    sorted_players = sorted(data['Player'].unique())
 
     # Add a bar trace for each player
-    for player in players:
+    for player in sorted_players:
         player_data = data[data['Player'] == player]
         fig.add_trace(
             go.Bar(
@@ -71,15 +76,22 @@ def draw(fig, data, mode):
         )
     )
 
-    # Update layout for better visualization
+    # Update layout
     fig.update_layout(
+        title=dict(
+            text='Lines per Act',
+            x=0,
+            xanchor='left'
+        ),
         xaxis=dict(
             tickvals=[1, 2, 3, 4, 5],
-            ticktext=['Act 1', 'Act 2', 'Act 3', 'Act 4', 'Act 5']),
+            ticktext=['Act 1', 'Act 2', 'Act 3', 'Act 4', 'Act 5']
+        ),
         yaxis_title=yaxis_title,
-        title = 'Lines per act',
-        barmode='stack'  # Stacked bar chart
+        barmode='stack',
+        legend = dict(traceorder='normal')
     )
+
     return fig
 
 def update_y_axis(fig, mode):

@@ -103,5 +103,11 @@ def clean_names(my_df):
     # TODO : Clean the player names
 
     my_df['Player'] = my_df['Player'].str.title()
-    
+    my_df = my_df.reset_index(drop=True)
     return my_df
+
+# my_df = pd.read_csv('src/assets/data/romeo_and_juliet.csv')
+# merged_df = summarize_lines(my_df)
+# result_df = replace_others(merged_df)
+# result = clean_names(result_df)
+# print(result)
