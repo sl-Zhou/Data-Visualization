@@ -49,9 +49,12 @@ def summarize_yearly_counts(dataframe):
     '''
     # TODO : Summarize df
     df = dataframe.copy()
-    # Extract year from date
-    df['Date_Plantation'] = df['Date_Plantation'].dt.year.astype(str) + '-12-31'
-    yearly_counts = df.groupby(['Arrond_Nom', 'Date_Plantation']).size().reset_index(name='Counts')
+    # Extract year from Date_Plantation as an integer
+    df['Year'] = df['Date_Plantation'].dt.year
+    # Group by neighborhood and year, count rows
+    yearly_counts = df.groupby(['Arrond_Nom', 'Year']).size().reset_index(name='Counts')
+    # Rename 'Year' to 'Date_Plantation'
+    yearly_counts.rename(columns={'Year': 'Date_Plantation'}, inplace=True)
     return yearly_counts
 
 
@@ -100,35 +103,36 @@ def get_daily_info(dataframe, arrond, year):
             neighborhood and year.
     '''
     # TODO : Get daily tree count data and return
+        # Filter the dataframe for the given year and neighborhood
+    # Filter the dataframe for the given year and neighborhood
     df_filtered = dataframe[
         (dataframe['Arrond_Nom'] == arrond) & 
         (dataframe['Date_Plantation'].dt.year == int(year))
     ]
-    daily_counts = df_filtered.groupby('Date_Plantation').size().reset_index(name='Counts')
-    # Create a full date range for the year
-    full_date_range = pd.date_range(
-        start=f"{year}-01-01",
-        end=f"{year}-12-31",
+    
+    # Group by day and count the number of trees planted each day
+    daily_counts = df_filtered.groupby('Date_Plantation').size()
+    
+    # Create a date range from the min to max planting date
+    date_range = pd.date_range(
+        start=daily_counts.index.min(),
+        end=daily_counts.index.max(),
         freq="D"
-    ).to_frame(name='Date_Plantation')
+    )
     
-    # Merge the full date range with the daily counts
-    merged_df = pd.merge(
-        full_date_range,
-        daily_counts,
-        on='Date_Plantation',
-        how='left'
-    ).fillna(0)  # Fill empty cells with 0
+    # Reindex to include all dates in the range, filling missing with 0
+    daily_counts = daily_counts.reindex(date_range, fill_value=0).reset_index()
     
-    # Convert counts to integers
-    merged_df['Counts'] = merged_df['Counts'].astype(int)
+    # Rename columns to match the first function
+    daily_counts.columns = ['Date_Plantation', 'Counts']
+    
+    return daily_counts
 
-    return merged_df
-
-data = pd.read_csv('src/assets\data/arbres.csv')
-data = convert_dates(data)
-data_f = filter_years(data, 2010, 2020)
+# data = pd.read_csv('src/assets/data/arbres.csv')
+# data = convert_dates(data)
+# data = filter_years(data, 2010, 2020)
 # data = summarize_yearly_counts(data)
-
-data = get_daily_info(data_f, 'Le Sud-Ouest', '2017')
-print(data.to_string(index=False))
+# data = restructure_df(data)
+# print(data)
+# data = get_daily_info(data, 'Le Sud-Ouest', '2017')
+# print(data.to_string(index=False))
