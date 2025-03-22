@@ -23,7 +23,7 @@ import bubble
 app = dash.Dash(__name__)
 app.title = 'TP4 | INF8808'
 
-with open('src/assets/data/countriesData.json') as data_file:
+with open('../src/assets/data/countriesData.json') as data_file:
     data = json.load(data_file)
 
 df_2000 = pd.json_normalize(data, '2000')
