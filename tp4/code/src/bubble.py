@@ -57,9 +57,9 @@ def update_animation_hover_template(fig):
      # ✅ Définition du hover template personnalisé
     hover_template = (
         "<b>Country:</b> %{hovertext}<br>"
-        "<b>Population:</b> %{marker.size:,}M<br>"
-        "<b>GDP:</b> %{x:,.2f} USD<br>"
-        "<b>CO₂ Emissions:</b> %{y:.2f} metric tonnes<br>"
+        "<b>Population:</b> %{marker.size}<br>"
+        "<b>GDP:</b> %{x:,.2f} $ (USD)<br>"
+        "<b>CO₂ emissions:</b> %{y:.1f} metric tonnes<br>"
     )
 
     # ✅ Appliquer le hover template à toutes les traces principales
@@ -191,7 +191,7 @@ def update_legend(fig):
     '''
     # TODO : Update legend
     fig.update_layout(
-        legend_title_text="Continent",  # ✅ Ajoute un titre clair
+        legend_title_text="Legend",  # ✅ Ajoute un titre clair
         legend=dict(
             orientation="v",  # ✅ Mode VERTICAL (au lieu de "h" pour horizontal)
             x=1.02,  # ✅ Positionne à droite du graphique

@@ -20,10 +20,9 @@ def get_bubble_hover_template():
 
     hover_template = (
         "<b>Country:</b> %{hovertext}<br>"
-        "<b>Population:</b> %{marker.size:,}M<br>"
-        "<b>GDP:</b> %{x:,.0f} USD<br>"
+        "<b>Population:</b> %{marker.size:,}<br>"
+        "<b>GDP:</b> %{x:,.2f} $ (USD)<br>"
         "<b>CO₂ Emissions:</b> %{y:.2f} metric tonnes<br>"
-        "Year: %{animation_frame}<extra></extra>"
     )
 
     return hover_template
